@@ -19,6 +19,10 @@ public class Project {
 	private final ListProperty<Developer> devs;
 	private final ListProperty<Sprint> sprints;
 	
+	public Project(String name, String desc, LocalDate start, LocalDate end) {
+		this(name, desc, start, end, -1);
+	}
+	
 	public Project(String name, String desc, LocalDate start, LocalDate end, long id) {
 		this.name = new SimpleStringProperty(name);
 		this.desc = new SimpleStringProperty(desc);

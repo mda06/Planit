@@ -2,6 +2,10 @@ package com.mda.planit.model;
 
 import java.time.LocalDate;
 
+import com.mda.planit.model.properties.GoalsPercProperty;
+import com.mda.planit.model.properties.TasksPercProperty;
+
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -16,7 +20,9 @@ public class Sprint {
 	private final ObjectProperty<LocalDate> startDate;
 	private final ObjectProperty<LocalDate> endDate;
 	private final ListProperty<SprintGoal> goals;
+	private final GoalsPercProperty goalsPerc;
 	private final ListProperty<Task> tasks;
+	private final TasksPercProperty tasksPerc;
 	
 	public Sprint(String name, LocalDate start, LocalDate end) {
 		this(name, start, end, -1);
@@ -27,7 +33,9 @@ public class Sprint {
 		startDate = new SimpleObjectProperty<LocalDate>(start);
 		endDate = new SimpleObjectProperty<LocalDate>(end);
 		goals = new SimpleListProperty<SprintGoal>(FXCollections.observableArrayList());
+		goalsPerc = new GoalsPercProperty(goals);
 		tasks = new SimpleListProperty<Task>(FXCollections.observableArrayList());
+		tasksPerc = new TasksPercProperty(tasks);
 		
 		this.id = id;
 	}
@@ -92,8 +100,16 @@ public class Sprint {
 		
 		return lst;
 	}
+
+	public DoubleProperty goalsPercProperty() {
+		return goalsPerc.valueProperty();
+	}
+
+	public DoubleProperty tasksPercProperty() {
+		return tasksPerc.valueProperty();
+	}
 	
-	public StringProperty namePropert() {
+	public StringProperty nameProperty() {
 		return name;
 	}
 	
@@ -102,7 +118,7 @@ public class Sprint {
 	}
 	
 	public ObjectProperty<LocalDate> endDateProperty() {
-		return startDate;
+		return endDate;
 	}
 	
 	public ListProperty<SprintGoal> goalsProperty() {

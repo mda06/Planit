@@ -17,7 +17,7 @@ public class Task {
 	private long id;
 	private final StringProperty name;
 	private final StringProperty desc;
-	private TaskState state;
+	private ObjectProperty<TaskState> state;
 	private final ObjectProperty<LocalDate> startDate;
 	private final ObjectProperty<LocalDate> endDate;
 	private final ListProperty<SprintGoal> goals;
@@ -31,7 +31,7 @@ public class Task {
 	public Task(String name, String desc, LocalDate start, LocalDate end, TaskState state, long id) {
 		this.name = new SimpleStringProperty(name);
 		this.desc = new SimpleStringProperty(desc);
-		this.state = state;
+		this.state = new SimpleObjectProperty<>(state);
 		startDate = new SimpleObjectProperty<LocalDate>(start);
 		endDate = new SimpleObjectProperty<LocalDate>(end);
 		goals = new SimpleListProperty<SprintGoal>(FXCollections.observableArrayList());
@@ -73,7 +73,7 @@ public class Task {
 	}
 	
 	public void setTaskState(TaskState state) {
-		this.state = state;
+		this.state.set(state);
 	}
 	
 	public void setStartDate(LocalDate date) {
@@ -101,7 +101,7 @@ public class Task {
 	}
 	
 	public TaskState getState() {
-		return state;
+		return state.get();
 	}
 
 	public LocalDate getStartDate() {
@@ -144,6 +144,10 @@ public class Task {
 		return endDate;
 	}
 
+	public ObjectProperty<TaskState> taskStateProperty() {
+		return state;
+	}
+	
 	public StringProperty nameProperty() {
 		return name;
 	}
