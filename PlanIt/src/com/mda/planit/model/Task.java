@@ -24,6 +24,10 @@ public class Task {
 	private final ListProperty<TaskLabel> labels;
 	private final MapProperty<Developer, DeveloperTask> devTasks;
 	
+	public Task() {
+		this("", "", null, null);
+	}
+	
 	public Task(String name, String desc, LocalDate start, LocalDate end) {
 		this(name, desc, start, end, TaskState.TODO, -1);
 	}

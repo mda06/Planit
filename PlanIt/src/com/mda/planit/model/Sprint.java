@@ -24,6 +24,10 @@ public class Sprint {
 	private final ListProperty<Task> tasks;
 	private final TasksPercProperty tasksPerc;
 	
+	public Sprint() {
+		this("", null, null);
+	}
+	
 	public Sprint(String name, LocalDate start, LocalDate end) {
 		this(name, start, end, -1);
 	}

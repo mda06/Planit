@@ -11,6 +11,10 @@ public class Developer {
 	private final StringProperty name;
 	private final ObjectProperty<Color> color;
 	
+	public Developer() {
+		this("", null);
+	}
+	
 	public Developer(String name, Color c) {
 		this(name, c, -1);
 	}
@@ -33,7 +37,7 @@ public class Developer {
 		this.color.set(color);
 	}
 	
-	public String getString() {
+	public String getName() {
 		return name.get();
 	}
 	

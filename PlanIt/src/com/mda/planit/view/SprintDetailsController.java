@@ -1,23 +1,20 @@
 package com.mda.planit.view;
 
-import java.time.LocalDate;
-
 import com.mda.planit.MainApp;
 import com.mda.planit.model.Sprint;
 import com.mda.planit.model.SprintGoal;
-import com.mda.planit.model.Task;
-import com.mda.planit.model.TaskLabel;
-import com.mda.planit.model.TaskState;
 import com.mda.planit.util.DateUtil;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class SprintDetailsController {
-	@SuppressWarnings("unused")
 	private MainApp mainApp;
+	private Sprint sprint;
 	
 	@FXML
 	private Label lblName;
@@ -35,29 +32,6 @@ public class SprintDetailsController {
 	@FXML
 	private TableColumn<SprintGoal, Boolean> columnGoalAccomplish;
 	
-	@FXML
-	private TableView<Task> tableTasks;
-	@FXML
-	private TableColumn<Task, String> columnTaskName;
-	@FXML
-	private TableColumn<Task, String> columnTaskDesc;
-	@FXML
-	private TableColumn<Task, LocalDate> columnTaskStartDate;
-	@FXML
-	private TableColumn<Task, LocalDate> columnTaskEndDate;
-	@FXML
-	private TableColumn<Task, TaskState> columnTaskState;
-
-	@FXML
-	private TableView<SprintGoal> tableTasksGoals;
-	@FXML
-	private TableColumn<SprintGoal, String> tableTaskGoalName;
-
-	@FXML
-	private TableView<TaskLabel> tableTasksLabel;
-	@FXML
-	private TableColumn<TaskLabel, String> tableTaskLabelName;
-	
 	public SprintDetailsController() {}
 	
 	@FXML
@@ -66,33 +40,54 @@ public class SprintDetailsController {
 		columnGoalDesc.setCellValueFactory(cellData -> cellData.getValue().descProperty());
 		columnGoalAccomplish.setCellValueFactory(cellData -> cellData.getValue().accomplishProperty());
 		
-		columnTaskName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		columnTaskDesc.setCellValueFactory(cellData -> cellData.getValue().descProperty());
-		columnTaskStartDate.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
-		columnTaskEndDate.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
-		columnTaskState.setCellValueFactory(cellData -> cellData.getValue().taskStateProperty());
-		
-		tableTaskGoalName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		tableTaskLabelName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		
-		tableTasks.getSelectionModel().selectedItemProperty().addListener(
-				(observable, oldValue, newValue) -> {
-					if(newValue != null) {
-						tableTasksGoals.setItems(newValue.getGoalsList());
-						tableTasksLabel.setItems(newValue.getLabelList());
-					} 
-				});
-		
 		showSprint(null);
 	}
 	
+	@FXML
+	private void handleNewGoal() {
+		SprintGoal tmp = new SprintGoal();
+		boolean ok = mainApp.showEditSprintGoalDialog(tmp);
+		if (ok) {
+			sprint.addSprintGoal(tmp);
+		}
+	}
+
+	@FXML
+	private void handleEditGoal() {
+		SprintGoal selected = tableGoals.getSelectionModel().getSelectedItem();
+		if (selected != null) {
+			mainApp.showEditSprintGoalDialog(selected);
+		} else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Goal Selected");
+			alert.setContentText("Please select a goal in the table.");
+
+			alert.showAndWait();
+		}
+	}
+
+	@FXML
+	private void handleDeleteGoal() {
+		int index = tableGoals.getSelectionModel().getSelectedIndex();
+		if(index >= 0) {
+			tableGoals.getItems().remove(index);
+		} else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getStage());
+			alert.setTitle("No selection");
+			alert.setHeaderText("No Goal selected");
+			alert.setContentText("Please select a goal");
+			alert.showAndWait();
+		}
+	}
+	
 	public void showSprint(Sprint s) {
-		tableTasksGoals.setItems(null);
-		tableTasksLabel.setItems(null);
+		sprint = s;
 		
 		if(s != null) {
 			tableGoals.setItems(s.goalsProperty());
-			tableTasks.setItems(s.taskProperty());
 			lblName.setText(s.getName());
 			lblStartDate.setText(DateUtil.format(s.getStartDate()));
 			lblEndDate.setText(DateUtil.format(s.getEndDate()));
