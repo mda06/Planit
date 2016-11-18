@@ -59,6 +59,7 @@ public class TaskDetailsController {
 					if(newValue != null) {
 						tableTasksGoals.setItems(newValue.getGoalsList());
 						tableTasksLabel.setItems(newValue.getLabelList());
+						mainApp.showDevelopersTasksDetails(newValue);
 					} 
 				});
 		

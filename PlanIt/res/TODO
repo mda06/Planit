@@ -1,0 +1,9 @@
+GUI
+Developer Tasks -> Create new tab
+	-Assigned to me
+	-Add a task done
+	-Show all developer tasks 
+	-Show my developer tasks
+
+MODEL
+Developer -> Role(Architect, DBManager, Project Manager, ...)

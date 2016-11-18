@@ -1,5 +1,6 @@
 package com.mda.planit.view.dialog;
 
+import com.mda.planit.model.Project;
 import com.mda.planit.model.Sprint;
 
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ public class SprintEditDialogController {
 	private DatePicker endDatePicker;
 	
 	private Stage dialogStage;
+	private Project project;
 	private Sprint sprint;
 	private boolean okClicked = false;
 	
@@ -28,8 +30,9 @@ public class SprintEditDialogController {
 		dialogStage = stage;
 	}
 	
-	public void setSprint(Sprint sp) {
+	public void setSprint(Sprint sp, Project p) {
 		sprint = sp;
+		project = p;
 		
 		txtName.setText(sprint.getName());
 		startDatePicker.setValue(sprint.getStartDate());
@@ -68,8 +71,17 @@ public class SprintEditDialogController {
 		if(startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
 			content += "Please enter the dates\n";
 			error = true;
-		} else if(startDatePicker.getValue().isAfter(endDatePicker.getValue())) {
+		}
+		if(startDatePicker.getValue().isAfter(endDatePicker.getValue())) {
 			content += "Start date must be before end date\n";
+			error = true;
+		}
+		if(startDatePicker.getValue().isAfter(project.getStartDate())) {
+			content += "Sprint start date must be after project start date\n";
+			error = true;
+		}
+		if(endDatePicker.getValue().isAfter(project.getEndDate())) {
+			content += "Sprint end date must be before project end date\n";
 			error = true;
 		}
 		

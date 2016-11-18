@@ -22,6 +22,7 @@ public class Task {
 	private final ObjectProperty<LocalDate> endDate;
 	private final ListProperty<SprintGoal> goals;
 	private final ListProperty<TaskLabel> labels;
+	private final ListProperty<Developer> assignedDevs;
 	private final MapProperty<Developer, DeveloperTask> devTasks;
 	
 	public Task() {
@@ -39,6 +40,7 @@ public class Task {
 		startDate = new SimpleObjectProperty<LocalDate>(start);
 		endDate = new SimpleObjectProperty<LocalDate>(end);
 		goals = new SimpleListProperty<SprintGoal>(FXCollections.observableArrayList());
+		assignedDevs = new SimpleListProperty<Developer>(FXCollections.observableArrayList());
 		labels = new SimpleListProperty<TaskLabel>(FXCollections.observableArrayList());
 		devTasks = new SimpleMapProperty<Developer, DeveloperTask>(FXCollections.observableHashMap());
 		
@@ -55,6 +57,11 @@ public class Task {
 		labels.add(lbl);
 	}
 	
+	public void addDev(Developer d) {
+		if(d == null) return;
+		assignedDevs.add(d);
+	}
+	
 	public void addDeveloperTask(Developer dev, Date begin, Date end, String comment) {
 		if(dev == null || begin == null || end == null || comment == null) return;
 		if(devTasks.get(dev) == null) {
@@ -66,6 +73,10 @@ public class Task {
 	
 	public void removeSprintGoal(SprintGoal sg) {
 		goals.remove(sg);
+	}
+	
+	public void removeDev(Developer d) {
+		assignedDevs.remove(d);
 	}
 	
 	public void removeTaskLabel(TaskLabel lbl) {
@@ -131,9 +142,13 @@ public class Task {
 	public ListProperty<TaskLabel> getLabelList() {
 		return labels;
 	}
-	
+
 	public ListProperty<SprintGoal> getGoalsList() {
 		return goals;
+	}
+
+	public ListProperty<Developer> getAssignedDevsList() {
+		return assignedDevs;
 	}
 	
 	public MapProperty<Developer, DeveloperTask> getDeveloperTaskList() {

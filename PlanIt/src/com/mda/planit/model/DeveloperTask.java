@@ -1,6 +1,8 @@
 package com.mda.planit.model;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -9,43 +11,42 @@ import javafx.util.Duration;
 
 public class DeveloperTask {
 	private Task task;
-	private ListProperty<Date> beginTimes;
-	private ListProperty<Date> endTimes;
-	private ListProperty<String> comments;
+	private ListProperty<DeveloperTaskDetail> details;
 	
 	public DeveloperTask(Task task) {
 		this.task = task;
-		beginTimes = new SimpleListProperty<Date>(FXCollections.observableArrayList());
-		endTimes = new SimpleListProperty<Date>(FXCollections.observableArrayList());
-		comments = new SimpleListProperty<String>(FXCollections.observableArrayList());
+		details = new SimpleListProperty<DeveloperTaskDetail>(FXCollections.observableArrayList());
 	}
 	
 	public void add(Date begin, Date end, String comment) {
-		beginTimes.add(begin);
-		endTimes.add(end);
+		details.add(new DeveloperTaskDetail(comment, begin, end));
 	}
 	
 	public Duration getTotalTime() {
 		Duration duration = new Duration(0);
-		for(int i = 0; i < beginTimes.getSize(); i++) {
-			Date begin = beginTimes.get(i);
-			Date end = endTimes.get(i);
+		for(int i = 0; i < details.getSize(); i++) {
+			Date begin = details.get(i).getBeginDate();
+			Date end = details.get(i).getEndDate();
 
 			duration = duration.add(new Duration(end.getTime() - begin.getTime()));
 		}
 		return duration;
 	}
 
-	public ListProperty<Date> beginTimesProperty() {
-		return beginTimes;
+	public List<Date> beginTimesProperty() {
+		return details.stream().map(dt -> dt.getBeginDate()).collect(Collectors.toList());
 	}
 
-	public ListProperty<String> commentsProperty() {
-		return comments;
+	public List<String> commentsProperty() {
+		return details.stream().map(dt -> dt.getComment()).collect(Collectors.toList());
 	}
 	
-	public ListProperty<Date> endTimesProperty() {
-		return endTimes;
+	public List<Date> endTimesProperty() {
+		return details.stream().map(dt -> dt.getEndDate()).collect(Collectors.toList());
+	}
+	
+	public ListProperty<DeveloperTaskDetail> detailsProperty() {
+		return details;
 	}
 	
 	public Task getTask() {

@@ -1,5 +1,6 @@
 package com.mda.planit.view.dialog;
 
+import com.mda.planit.model.Sprint;
 import com.mda.planit.model.Task;
 import com.mda.planit.model.TaskState;
 
@@ -25,6 +26,7 @@ public class TaskEditDialogController {
 	private ComboBox<TaskState> comboState;
 	
 	private Stage dialogStage;
+	private Sprint sprint;
 	private Task task;
 	private boolean okClicked = false;
 	
@@ -38,8 +40,9 @@ public class TaskEditDialogController {
 		dialogStage = stage;
 	}
 	
-	public void setTask(Task t) {
+	public void setTask(Task t, Sprint s) {
 		task = t;
+		sprint = s;
 		
 		txtName.setText(t.getName());
 		txtDesc.setText(t.getDesc());
@@ -86,8 +89,17 @@ public class TaskEditDialogController {
 		if(startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
 			content += "Please enter the dates\n";
 			error = true;
-		} else if(startDatePicker.getValue().isAfter(endDatePicker.getValue())) {
+		}
+		if(startDatePicker.getValue().isAfter(endDatePicker.getValue())) {
 			content += "Start date must be before end date\n";
+			error = true;
+		}
+		if(startDatePicker.getValue().isAfter(sprint.getStartDate())) {
+			content += "Task start date must be after sprint start date\n";
+			error = true;
+		}
+		if(endDatePicker.getValue().isAfter(sprint.getEndDate())) {
+			content += "Task end date must be before sprint end date\n";
 			error = true;
 		}
 		

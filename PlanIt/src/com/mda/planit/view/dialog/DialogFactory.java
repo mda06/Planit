@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.mda.planit.MainApp;
 import com.mda.planit.model.Developer;
+import com.mda.planit.model.Project;
 import com.mda.planit.model.Sprint;
 import com.mda.planit.model.SprintGoal;
 import com.mda.planit.model.Task;
@@ -49,7 +50,7 @@ public class DialogFactory {
 		}
 	}
 	
-	public boolean showEditSprintDialog(Sprint sp) {
+	public boolean showEditSprintDialog(Sprint sp, Project p) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/dialog/SprintEditDialog.fxml"));
@@ -64,7 +65,7 @@ public class DialogFactory {
 			
 			SprintEditDialogController dc = loader.getController();
 			dc.setDialogStage(dia);
-			dc.setSprint(sp);
+			dc.setSprint(sp, p);
 			
 			dia.showAndWait();
 			return dc.isOkClicked();
@@ -100,7 +101,7 @@ public class DialogFactory {
 		}
 	}
 	
-	public boolean showEditTaskDialog(Task selected) {
+	public boolean showEditTaskDialog(Task selected, Sprint s) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/dialog/TaskEditDialog.fxml"));
@@ -115,7 +116,7 @@ public class DialogFactory {
 			
 			TaskEditDialogController dc = loader.getController();
 			dc.setDialogStage(dia);
-			dc.setTask(selected);
+			dc.setTask(selected, s);
 			
 			dia.showAndWait();
 			return dc.isOkClicked();
