@@ -13,12 +13,7 @@ import com.mda.planit.model.TaskState;
 import com.mda.planit.view.ProjectOverviewController;
 import com.mda.planit.view.SprintDetailsController;
 import com.mda.planit.view.TaskDetailsController;
-import com.mda.planit.view.dialog.DeveloperEditDialogController;
-import com.mda.planit.view.dialog.SelectLabelDialogController;
-import com.mda.planit.view.dialog.SelectSprintGoalDialogController;
-import com.mda.planit.view.dialog.SprintEditDialogController;
-import com.mda.planit.view.dialog.SprintGoalEditDialogController;
-import com.mda.planit.view.dialog.TaskEditDialogController;
+import com.mda.planit.view.dialog.DialogFactory;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -31,7 +26,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
@@ -44,6 +38,7 @@ public class MainApp extends Application {
 	private SprintDetailsController spDetails;
 	private ProjectOverviewController pOverview;
 	private TaskDetailsController tsDetails;
+	private DialogFactory dialogFactory;
 	
 	private TabPane tabPane;
 	
@@ -51,6 +46,7 @@ public class MainApp extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
 		stage.setTitle("Project");
+		dialogFactory = new DialogFactory(stage);
 		
 		initData();
 		initRootLayout();
@@ -174,158 +170,29 @@ public class MainApp extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public boolean showEditDeveloperDialog(Developer d) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/dialog/DeveloperEditDialog.fxml"));
-			AnchorPane pane = loader.load();
-			
-			Stage dia = new Stage();
-			dia.setTitle("Edit Developer");
-			dia.initModality(Modality.WINDOW_MODAL);
-			dia.initOwner(stage);
-			Scene scene = new Scene(pane);
-			dia.setScene(scene);
-			
-			DeveloperEditDialogController dc = loader.getController();
-			dc.setDialogStage(dia);
-			dc.setDeveloper(d);
-			
-			dia.showAndWait();
-			return dc.isOkClicked();
-		} catch(IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		return dialogFactory.showEditDeveloperDialog(d);
 	}
 	
 	public boolean showEditSprintDialog(Sprint sp) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/dialog/SprintEditDialog.fxml"));
-			AnchorPane pane = loader.load();
-			
-			Stage dia = new Stage();
-			dia.setTitle("Edit Sprint");
-			dia.initModality(Modality.WINDOW_MODAL);
-			dia.initOwner(stage);
-			Scene scene = new Scene(pane);
-			dia.setScene(scene);
-			
-			SprintEditDialogController dc = loader.getController();
-			dc.setDialogStage(dia);
-			dc.setSprint(sp);
-			
-			dia.showAndWait();
-			return dc.isOkClicked();
-		} catch(IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		return dialogFactory.showEditSprintDialog(sp);
 	}
 	
-
 	public boolean showEditSprintGoalDialog(SprintGoal tmp) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/dialog/SprintGoalEditDialog.fxml"));
-			AnchorPane pane = loader.load();
-			
-			Stage dia = new Stage();
-			dia.setTitle("Edit Goal");
-			dia.initModality(Modality.WINDOW_MODAL);
-			dia.initOwner(stage);
-			Scene scene = new Scene(pane);
-			dia.setScene(scene);
-			
-			SprintGoalEditDialogController dc = loader.getController();
-			dc.setDialogStage(dia);
-			dc.setGoal(tmp);
-			
-			dia.showAndWait();
-			return dc.isOkClicked();
-		} catch(IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		return dialogFactory.showEditSprintGoalDialog(tmp);
 	}
 	
 	public boolean showEditTaskDialog(Task selected) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/dialog/TaskEditDialog.fxml"));
-			AnchorPane pane = loader.load();
-			
-			Stage dia = new Stage();
-			dia.setTitle("Edit Task");
-			dia.initModality(Modality.WINDOW_MODAL);
-			dia.initOwner(stage);
-			Scene scene = new Scene(pane);
-			dia.setScene(scene);
-			
-			TaskEditDialogController dc = loader.getController();
-			dc.setDialogStage(dia);
-			dc.setTask(selected);
-			
-			dia.showAndWait();
-			return dc.isOkClicked();
-		} catch(IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		return dialogFactory.showEditTaskDialog(selected);
 	}
 	
 	public boolean showLinkTaskGoalDialog(Task selected) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/dialog/SelectSprintGoalDialog.fxml"));
-			AnchorPane pane = loader.load();
-			
-			Stage dia = new Stage();
-			dia.setTitle("Select a sprint goal");
-			dia.initModality(Modality.WINDOW_MODAL);
-			dia.initOwner(stage);
-			Scene scene = new Scene(pane);
-			dia.setScene(scene);
-			
-			SelectSprintGoalDialogController dc = loader.getController();
-			dc.setDialogStage(dia);
-			dc.setSprint(pOverview.getSelectedSprint());
-			dc.show(selected);
-			
-			dia.showAndWait();
-			return dc.isOkClicked();
-		} catch(IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		return dialogFactory.showLinkTaskGoalDialog(selected, pOverview);
 	}
 	
 	public boolean showLinkTaskLabelDialog(Task selected) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/dialog/SelectTaskLabelDialog.fxml"));
-			AnchorPane pane = loader.load();
-			
-			Stage dia = new Stage();
-			dia.setTitle("Select a task label");
-			dia.initModality(Modality.WINDOW_MODAL);
-			dia.initOwner(stage);
-			Scene scene = new Scene(pane);
-			dia.setScene(scene);
-			
-			SelectLabelDialogController dc = loader.getController();
-			dc.setDialogStage(dia);
-			dc.setLabels(labels);
-			dc.show(selected);
-			
-			dia.showAndWait();
-			return dc.isOkClicked();
-		} catch(IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		return dialogFactory.showLinkTaskLabelDialog(selected, labels);
 	}
 	
 	public void showProjectOverview(Project p) {
