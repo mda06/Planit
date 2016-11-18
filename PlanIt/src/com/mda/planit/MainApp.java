@@ -10,26 +10,33 @@ import com.mda.planit.model.SprintGoal;
 import com.mda.planit.model.Task;
 import com.mda.planit.model.TaskLabel;
 import com.mda.planit.model.TaskState;
-import com.mda.planit.view.DeveloperEditDialogController;
 import com.mda.planit.view.ProjectOverviewController;
 import com.mda.planit.view.SprintDetailsController;
-import com.mda.planit.view.SprintEditDialogController;
 import com.mda.planit.view.TaskDetailsController;
+import com.mda.planit.view.dialog.DeveloperEditDialogController;
+import com.mda.planit.view.dialog.SelectLabelDialogController;
+import com.mda.planit.view.dialog.SelectSprintGoalDialogController;
+import com.mda.planit.view.dialog.SprintEditDialogController;
 import com.mda.planit.view.dialog.SprintGoalEditDialogController;
 import com.mda.planit.view.dialog.TaskEditDialogController;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
+	
+	private ObservableList<TaskLabel> labels;
 
 	private Stage stage;
 	private Project project;
@@ -38,7 +45,7 @@ public class MainApp extends Application {
 	private ProjectOverviewController pOverview;
 	private TaskDetailsController tsDetails;
 	
-	private AnchorPane paneSprintDetails;
+	private TabPane tabPane;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -54,7 +61,9 @@ public class MainApp extends Application {
 	}
 	
 	private void initData() {
-		final TaskLabel lblProg = new TaskLabel("Programming", Color.RED);
+		labels = FXCollections.observableArrayList(
+				new TaskLabel("Programming", Color.RED),
+				new TaskLabel("Setup", Color.YELLOW));
 		
 		project = new Project("First Project on Planit", "Testing every feature", LocalDate.now(), LocalDate.of(2017, 2, 1));
 		project.addDeveloper(new Developer("Mike", Color.BURLYWOOD));
@@ -74,8 +83,8 @@ public class MainApp extends Application {
 		sp1.addTask(new Task("Set ups", "On each pc", LocalDate.now().plusDays(3), LocalDate.now().plusDays(6)));
 		Task ts = new Task("Developing the base architecture", "UML in code", LocalDate.now().plusDays(3), LocalDate.of(2016, 11, 30));
 		ts.setTaskState(TaskState.RUNNING);
-		ts.addTaskLabel(lblProg);
-		ts.addTaskLabel(new TaskLabel("Setup", Color.YELLOW));
+		ts.addTaskLabel(labels.get(0));
+		ts.addTaskLabel(labels.get(1));
 		ts.addSprintGoal(sp1.goalsProperty().get(0));
 		ts.addSprintGoal(sp1.goalsProperty().get(1));
 		ts.addSprintGoal(sp1.goalsProperty().get(2));
@@ -94,7 +103,7 @@ public class MainApp extends Application {
 		Sprint sp3 = new Sprint("Sprint 3", LocalDate.of(2017, 1, 1), project.getEndDate());
 		sp3.addSprintGoal(new SprintGoal("Clear code", "No bugs, beautifull code"));	
 		ts = new Task("Review code of Mike", "Some white spaces to clean", LocalDate.of(2017, 1, 1), LocalDate.of(2017, 1, 1).plusDays(5));
-		ts.addTaskLabel(lblProg);
+		ts.addTaskLabel(labels.get(0));
 		ts.addSprintGoal(sp3.goalsProperty().get(0));
 		sp3.addTask(ts);
 		sp3.addSprintGoal(new SprintGoal("Setup release", "Everything right"));
@@ -106,9 +115,10 @@ public class MainApp extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
 			rootLayout = loader.load();
-			
+
 			Scene scene = new Scene(new BorderPane(rootLayout), 1300, 750);
 			stage.setScene(scene);
+			stage.setFullScreen(true);
 			stage.show();
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -121,6 +131,7 @@ public class MainApp extends Application {
 			loader.setLocation(MainApp.class.getResource("view/ProjectOverview.fxml"));
 			AnchorPane pane = loader.load();
 
+			
 			rootLayout.getItems().add(pane);
 			pOverview = loader.getController();
 			pOverview.setMainApp(this);
@@ -133,9 +144,14 @@ public class MainApp extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/SprintDetails.fxml"));
-			paneSprintDetails = loader.load();
+			AnchorPane pane = loader.load();
 
-			rootLayout.getItems().add(paneSprintDetails);
+
+			tabPane = new TabPane();
+			rootLayout.getItems().add(tabPane);
+			Tab tab = new Tab("Sprint Overview");
+			tab.setContent(pane);
+			tabPane.getTabs().add(tab);
 			spDetails = loader.getController();
 			spDetails.setMainApp(this);
 		} catch (IOException e) {
@@ -148,8 +164,10 @@ public class MainApp extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/TaskDetails.fxml"));
 			AnchorPane pane = loader.load();
-
-			((VBox)(paneSprintDetails.getChildren().get(0))).getChildren().add(pane);
+			
+			Tab tab = new Tab("Tasks Overview");
+			tab.setContent(pane);
+			tabPane.getTabs().add(tab);
 			tsDetails = loader.getController();
 			tsDetails.setMainApp(this);
 		} catch (IOException e) {
@@ -160,7 +178,7 @@ public class MainApp extends Application {
 	public boolean showEditDeveloperDialog(Developer d) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/DeveloperEditDialog.fxml"));
+			loader.setLocation(MainApp.class.getResource("view/dialog/DeveloperEditDialog.fxml"));
 			AnchorPane pane = loader.load();
 			
 			Stage dia = new Stage();
@@ -185,7 +203,7 @@ public class MainApp extends Application {
 	public boolean showEditSprintDialog(Sprint sp) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/SprintEditDialog.fxml"));
+			loader.setLocation(MainApp.class.getResource("view/dialog/SprintEditDialog.fxml"));
 			AnchorPane pane = loader.load();
 			
 			Stage dia = new Stage();
@@ -249,6 +267,58 @@ public class MainApp extends Application {
 			TaskEditDialogController dc = loader.getController();
 			dc.setDialogStage(dia);
 			dc.setTask(selected);
+			
+			dia.showAndWait();
+			return dc.isOkClicked();
+		} catch(IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean showLinkTaskGoalDialog(Task selected) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/dialog/SelectSprintGoalDialog.fxml"));
+			AnchorPane pane = loader.load();
+			
+			Stage dia = new Stage();
+			dia.setTitle("Select a sprint goal");
+			dia.initModality(Modality.WINDOW_MODAL);
+			dia.initOwner(stage);
+			Scene scene = new Scene(pane);
+			dia.setScene(scene);
+			
+			SelectSprintGoalDialogController dc = loader.getController();
+			dc.setDialogStage(dia);
+			dc.setSprint(pOverview.getSelectedSprint());
+			dc.show(selected);
+			
+			dia.showAndWait();
+			return dc.isOkClicked();
+		} catch(IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean showLinkTaskLabelDialog(Task selected) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/dialog/SelectTaskLabelDialog.fxml"));
+			AnchorPane pane = loader.load();
+			
+			Stage dia = new Stage();
+			dia.setTitle("Select a task label");
+			dia.initModality(Modality.WINDOW_MODAL);
+			dia.initOwner(stage);
+			Scene scene = new Scene(pane);
+			dia.setScene(scene);
+			
+			SelectLabelDialogController dc = loader.getController();
+			dc.setDialogStage(dia);
+			dc.setLabels(labels);
+			dc.show(selected);
 			
 			dia.showAndWait();
 			return dc.isOkClicked();

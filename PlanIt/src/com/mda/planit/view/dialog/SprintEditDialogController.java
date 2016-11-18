@@ -1,4 +1,4 @@
-package com.mda.planit.view;
+package com.mda.planit.view.dialog;
 
 import com.mda.planit.model.Sprint;
 

@@ -68,4 +68,9 @@ public class SprintGoal {
 	public StringProperty descProperty() {
 		return desc;
 	}
+	
+	@Override
+	public String toString() {
+		return name.get();
+	}
 }

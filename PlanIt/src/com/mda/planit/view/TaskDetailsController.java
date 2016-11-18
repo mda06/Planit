@@ -84,6 +84,17 @@ public class TaskDetailsController {
 	
 	@FXML
 	private void handleNewTask() {
+		if(sprint == null) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Sprint Selected");
+			alert.setContentText("Please select a sprint before.");
+
+			alert.showAndWait();
+			return;
+		}
+		
 		Task tmp = new Task();
 		boolean ok = mainApp.showEditTaskDialog(tmp);
 		if (ok) {
@@ -122,6 +133,67 @@ public class TaskDetailsController {
 		}
 	}
 	
+	@FXML
+	private void handleLinkSprintGoal() {
+		Task selected = tableTasks.getSelectionModel().getSelectedItem();
+		if (selected != null) {
+			mainApp.showLinkTaskGoalDialog(selected);
+		} else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Task Selected");
+			alert.setContentText("Please select a task in the table.");
+
+			alert.showAndWait();
+		}
+	}
+	
+	@FXML
+	private void handleRemoveSprintGoal() {
+		int index = tableTasksGoals.getSelectionModel().getSelectedIndex();
+		if(index >= 0) {
+			tableTasksGoals.getItems().remove(index);
+		} else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getStage());
+			alert.setTitle("No selection");
+			alert.setHeaderText("No Tasks selected");
+			alert.setContentText("Please select a task");
+			alert.showAndWait();
+		}
+	}
+	
+	@FXML
+	private void handleLinkLabel() {
+		Task selected = tableTasks.getSelectionModel().getSelectedItem();
+		if (selected != null) {
+			mainApp.showLinkTaskLabelDialog(selected);
+		} else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Task Selected");
+			alert.setContentText("Please select a task in the table.");
+
+			alert.showAndWait();
+		}
+	}
+	
+	@FXML
+	private void handleRemoveLabel() {
+		int index = tableTasksLabel.getSelectionModel().getSelectedIndex();
+		if(index >= 0) {
+			tableTasksLabel.getItems().remove(index);
+		} else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getStage());
+			alert.setTitle("No selection");
+			alert.setHeaderText("No Tasks selected");
+			alert.setContentText("Please select a task");
+			alert.showAndWait();
+		}
+	}	
 	
 	public void setMainApp(MainApp app) {
 		mainApp = app;

@@ -50,8 +50,8 @@
                         <TableView fx:id="tableGoals" layoutX="26.4" layoutY="25.4" prefHeight="258.0" prefWidth="781.0" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
                           <columns>
                             <TableColumn fx:id="columnGoalName" minWidth="150.0" prefWidth="-1.0" resizable="false" text="Name" />
-                            <TableColumn fx:id="columnGoalDesc" minWidth="150.0" prefWidth="340.05479431152344" resizable="false" text="Description" />
-                              <TableColumn fx:id="columnGoalAccomplish" minWidth="0.0" prefWidth="94.9451904296875" resizable="false" text="Accomplish" />
+                            <TableColumn fx:id="columnGoalDesc" minWidth="150.0" prefWidth="-1.0" resizable="false" text="Description" />
+                              <TableColumn fx:id="columnGoalAccomplish" minWidth="150.0" prefWidth="-1.0" resizable="false" text="Accomplish" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

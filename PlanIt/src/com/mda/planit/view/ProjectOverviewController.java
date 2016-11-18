@@ -172,6 +172,10 @@ public class ProjectOverviewController {
 			alert.showAndWait();
 		}
 	}
+	
+	public Sprint getSelectedSprint() {
+		return tableSprint.getSelectionModel().getSelectedItem();
+	}
 
 	public void setMainApp(MainApp app) {
 		mainApp = app;

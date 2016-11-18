@@ -56,4 +56,9 @@ public class TaskLabel {
 	public ObjectProperty<Color> colorProperty() {
 		return color;
 	}
+	
+	@Override
+	public String toString() {
+		return name.get();
+	}
 }

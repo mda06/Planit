@@ -15,14 +15,14 @@ import javafx.scene.control.TableView;
 public class SprintDetailsController {
 	private MainApp mainApp;
 	private Sprint sprint;
-	
+
 	@FXML
 	private Label lblName;
 	@FXML
 	private Label lblStartDate;
 	@FXML
 	private Label lblEndDate;
-	
+
 	@FXML
 	private TableView<SprintGoal> tableGoals;
 	@FXML
@@ -31,20 +31,32 @@ public class SprintDetailsController {
 	private TableColumn<SprintGoal, String> columnGoalDesc;
 	@FXML
 	private TableColumn<SprintGoal, Boolean> columnGoalAccomplish;
-	
-	public SprintDetailsController() {}
-	
+
+	public SprintDetailsController() {
+	}
+
 	@FXML
 	private void initialize() {
 		columnGoalName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		columnGoalDesc.setCellValueFactory(cellData -> cellData.getValue().descProperty());
 		columnGoalAccomplish.setCellValueFactory(cellData -> cellData.getValue().accomplishProperty());
-		
+
 		showSprint(null);
 	}
-	
+
 	@FXML
 	private void handleNewGoal() {
+		if (sprint == null) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getStage());
+			alert.setTitle("No Selection");
+			alert.setHeaderText("No Sprint Selected");
+			alert.setContentText("Please select a sprint before.");
+
+			alert.showAndWait();
+			return;
+		}
+
 		SprintGoal tmp = new SprintGoal();
 		boolean ok = mainApp.showEditSprintGoalDialog(tmp);
 		if (ok) {
@@ -71,7 +83,7 @@ public class SprintDetailsController {
 	@FXML
 	private void handleDeleteGoal() {
 		int index = tableGoals.getSelectionModel().getSelectedIndex();
-		if(index >= 0) {
+		if (index >= 0) {
 			tableGoals.getItems().remove(index);
 		} else {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -82,11 +94,11 @@ public class SprintDetailsController {
 			alert.showAndWait();
 		}
 	}
-	
+
 	public void showSprint(Sprint s) {
 		sprint = s;
-		
-		if(s != null) {
+
+		if (s != null) {
 			tableGoals.setItems(s.goalsProperty());
 			lblName.setText(s.getName());
 			lblStartDate.setText(DateUtil.format(s.getStartDate()));
@@ -97,7 +109,7 @@ public class SprintDetailsController {
 			lblEndDate.setText("");
 		}
 	}
-	
+
 	public void setMainApp(MainApp app) {
 		mainApp = app;
 	}
