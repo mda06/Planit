@@ -104,6 +104,7 @@ public class SprintDetailsController {
 			lblStartDate.setText(DateUtil.format(s.getStartDate()));
 			lblEndDate.setText(DateUtil.format(s.getEndDate()));
 		} else {
+			tableGoals.setItems(null);
 			lblName.setText("");
 			lblStartDate.setText("");
 			lblEndDate.setText("");

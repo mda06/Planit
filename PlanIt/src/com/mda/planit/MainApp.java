@@ -12,6 +12,7 @@ import com.mda.planit.model.Task;
 import com.mda.planit.model.TaskLabel;
 import com.mda.planit.model.TaskState;
 import com.mda.planit.view.DevelopersDetailController;
+import com.mda.planit.view.MyWorkController;
 import com.mda.planit.view.ProjectOverviewController;
 import com.mda.planit.view.SprintDetailsController;
 import com.mda.planit.view.TaskDetailsController;
@@ -44,6 +45,7 @@ public class MainApp extends Application {
 	private ProjectOverviewController pOverview;
 	private TaskDetailsController tsDetails;
 	private DevelopersDetailController devDetails;
+	private MyWorkController myController;
 	private DialogFactory dialogFactory;
 	
 	private VBox taskPane;
@@ -62,6 +64,7 @@ public class MainApp extends Application {
 		showSprintDetails();
 		showTasksDetails();
 		showDevelopersTasksDetail();
+		showMyWork();
 		showProjectOverview(project);
 	}
 	
@@ -211,6 +214,22 @@ public class MainApp extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	private void showMyWork() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/MyWork.fxml"));
+			VBox pane = loader.load();
+			
+			tabTasks = new Tab("My Work");
+			tabTasks.setContent(pane);
+			tabPane.getTabs().add(tabTasks);
+			myController = loader.getController();
+			myController.setMainApp(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public boolean showEditDeveloperDialog(Developer d) {
 		return dialogFactory.showEditDeveloperDialog(d);
@@ -244,6 +263,7 @@ public class MainApp extends Application {
 		spDetails.showSprint(s);
 		tsDetails.showTasks(s);
 		devDetails.showDeveloperTask(null);
+		myController.showGlobalDeveloperTask(s, connectedDev);
 	}
 	
 	public void showDevelopersTasksDetails(Task t) {

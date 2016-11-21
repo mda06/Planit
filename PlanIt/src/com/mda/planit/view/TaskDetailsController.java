@@ -78,8 +78,8 @@ public class TaskDetailsController {
 	
 	public void showTasks(Sprint sprint) {
 		this.sprint = sprint;
-		tableTasksGoals.getItems().clear();
-		tableTasksLabel.getItems().clear();
+		tableTasksGoals.setItems(null);
+		tableTasksLabel.setItems(null);
 		tableTasks.setItems(sprint.taskProperty());
 	}
 	

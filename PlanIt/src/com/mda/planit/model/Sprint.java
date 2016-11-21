@@ -1,6 +1,8 @@
 package com.mda.planit.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mda.planit.model.properties.GoalsPercProperty;
 import com.mda.planit.model.properties.TasksPercProperty;
@@ -94,8 +96,8 @@ public class Sprint {
 		return endDate.get();
 	}
 	
-	public ListProperty<DeveloperTask> getTasks(Developer d) {
-		ListProperty<DeveloperTask> lst = new SimpleListProperty<DeveloperTask>();
+	public List<DeveloperTask> getTasks(Developer d) {
+		List<DeveloperTask> lst = new ArrayList<DeveloperTask>();
 
 		for(Task s : tasks) {
 			DeveloperTask dt = s.getTasks(d);

@@ -64,8 +64,8 @@ public class DevelopersDetailController {
 		if(task != null) {
 			tableDevs.setItems(task.getAssignedDevsList());
 		} else {
-			tableDevs.getItems().clear();
-			tableWork.getItems().clear();
+			tableDevs.setItems(null);
+			tableWork.setItems(null);
 		}
 	}
 	
