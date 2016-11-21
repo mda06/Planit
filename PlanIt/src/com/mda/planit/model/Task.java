@@ -62,13 +62,13 @@ public class Task {
 		assignedDevs.add(d);
 	}
 	
-	public void addDeveloperTask(Developer dev, Date begin, Date end, String comment) {
-		if(dev == null || begin == null || end == null || comment == null) return;
+	public DeveloperTaskDetail addDeveloperTask(Developer dev, Date begin, Date end, String comment) {
+		if(dev == null || begin == null || end == null || comment == null) return null;
 		if(devTasks.get(dev) == null) {
 			devTasks.put(dev, new DeveloperTask(this));
 		}
 		
-		devTasks.get(dev).add(begin, end, comment);
+		return devTasks.get(dev).add(begin, end, comment);
 	}
 	
 	public void removeSprintGoal(SprintGoal sg) {

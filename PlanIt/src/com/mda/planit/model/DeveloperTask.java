@@ -18,8 +18,10 @@ public class DeveloperTask {
 		details = new SimpleListProperty<DeveloperTaskDetail>(FXCollections.observableArrayList());
 	}
 	
-	public void add(Date begin, Date end, String comment) {
-		details.add(new DeveloperTaskDetail(comment, begin, end));
+	public DeveloperTaskDetail add(Date begin, Date end, String comment) {
+		DeveloperTaskDetail td = new DeveloperTaskDetail(comment, begin, end);
+		details.add(td);
+		return td;
 	}
 	
 	public Duration getTotalTime() {

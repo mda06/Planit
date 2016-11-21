@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
 public class SprintDetailsController {
@@ -40,6 +41,17 @@ public class SprintDetailsController {
 		columnGoalName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		columnGoalDesc.setCellValueFactory(cellData -> cellData.getValue().descProperty());
 		columnGoalAccomplish.setCellValueFactory(cellData -> cellData.getValue().accomplishProperty());
+
+		tableGoals.setRowFactory(tv -> {
+			TableRow<SprintGoal> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					SprintGoal sg = row.getItem();
+					sg.setAccomplish(!sg.isAccomplish());
+				}
+			});
+			return row;
+		});
 
 		showSprint(null);
 	}
