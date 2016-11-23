@@ -1,11 +1,23 @@
 GUI
-Developer Tasks -> Create new tab
-	-Assigned to me
-	-Add a task done
+Developer Tasks 
 	-Show all developer tasks 
-	-Show my developer tasks
+	-Better way to display the table
+
+Project over
+		-Users total time
+		
+Task
+	-Assigned developers add/edit/remove
+	-Labels add/edit/remove
+
+Labels
+	-Create labels
+	
+Sprint Overview
+	-Show all works Task + Dev + Details
+
+Work Overview
+	-Bing the list instead of everything change...
 
 MODEL
 Developer -> Role(Architect, DBManager, Project Manager, ...)
-
--WHEN CLEARING THE TABLE THE LIST CLEAR ALSO

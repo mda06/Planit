@@ -88,7 +88,7 @@ public class Project {
 		return endDate.get();
 	}
 	
-	public ListProperty<DeveloperTask> getTasks(Developer d) {
+	/*public ListProperty<DeveloperTask> getTasks(Developer d) {
 		ListProperty<DeveloperTask> lst = new SimpleListProperty<DeveloperTask>();
 
 		for(Sprint s : sprints) {
@@ -98,7 +98,7 @@ public class Project {
 		}
 		
 		return lst;
-	}
+	}*/
 	
 	public ListProperty<Sprint> sprintsProperty() {
 		return sprints;

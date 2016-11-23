@@ -11,7 +11,7 @@ import com.mda.planit.model.SprintGoal;
 import com.mda.planit.model.Task;
 import com.mda.planit.model.TaskLabel;
 import com.mda.planit.model.TaskState;
-import com.mda.planit.view.DevelopersDetailController;
+import com.mda.planit.view.DevelopersWorkController;
 import com.mda.planit.view.MyWorkController;
 import com.mda.planit.view.ProjectOverviewController;
 import com.mda.planit.view.SprintDetailsController;
@@ -44,7 +44,7 @@ public class MainApp extends Application {
 	private SprintDetailsController spDetails;
 	private ProjectOverviewController pOverview;
 	private TaskDetailsController tsDetails;
-	private DevelopersDetailController devDetails;
+	private DevelopersWorkController devDetails;
 	private MyWorkController myController;
 	private DialogFactory dialogFactory;
 	
@@ -115,7 +115,7 @@ public class MainApp extends Application {
 		ts.addDev(connectedDev);
 		Calendar begin = Calendar.getInstance(); begin.set(2016, 11, 31, 16, 32);
 		Calendar end = Calendar.getInstance(); end.set(2016, 11, 31, 18, 32);
-		ts.addDeveloperTask(connectedDev, begin.getTime(), end.getTime(), "Create this feature");
+		ts.addDeveloperWork(connectedDev, begin.getTime(), end.getTime(), "Create this feature");
 		sp2.addTask(ts);
 		sp2.addSprintGoal(new SprintGoal("GUI", "Nice gui"));
 		sp2.goalsProperty().get(2).setAccomplish(true);
@@ -203,7 +203,7 @@ public class MainApp extends Application {
 	private void showDevelopersTasksDetail() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/DevelopersTaskDetails.fxml"));
+			loader.setLocation(MainApp.class.getResource("view/DevelopersWorkDetails.fxml"));
 			TitledPane pane = loader.load();
 			
 			taskPane.getChildren().add(pane);
@@ -263,7 +263,7 @@ public class MainApp extends Application {
 		spDetails.showSprint(s);
 		tsDetails.showTasks(s);
 		devDetails.showDeveloperTask(null);
-		myController.showGlobalDeveloperTask(s, connectedDev);
+		myController.showGlobalDeveloperTask(s);
 	}
 	
 	public void showDevelopersTasksDetails(Task t) {

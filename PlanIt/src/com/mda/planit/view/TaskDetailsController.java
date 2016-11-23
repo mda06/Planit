@@ -97,6 +97,8 @@ public class TaskDetailsController {
 		}
 		
 		Task tmp = new Task();
+		tmp.setStartDate(LocalDate.now());
+		tmp.setEndDate(LocalDate.now().plusDays(1));
 		boolean ok = mainApp.showEditTaskDialog(tmp);
 		if (ok) {
 			sprint.addTask(tmp);

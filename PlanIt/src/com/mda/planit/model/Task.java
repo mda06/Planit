@@ -17,13 +17,13 @@ public class Task {
 	private long id;
 	private final StringProperty name;
 	private final StringProperty desc;
-	private ObjectProperty<TaskState> state;
+	private final ObjectProperty<TaskState> state;
 	private final ObjectProperty<LocalDate> startDate;
 	private final ObjectProperty<LocalDate> endDate;
 	private final ListProperty<SprintGoal> goals;
 	private final ListProperty<TaskLabel> labels;
 	private final ListProperty<Developer> assignedDevs;
-	private final MapProperty<Developer, DeveloperTask> devTasks;
+	private final MapProperty<Developer, ListProperty<DeveloperWork>> devWork;
 	
 	public Task() {
 		this("", "", null, null);
@@ -42,7 +42,7 @@ public class Task {
 		goals = new SimpleListProperty<SprintGoal>(FXCollections.observableArrayList());
 		assignedDevs = new SimpleListProperty<Developer>(FXCollections.observableArrayList());
 		labels = new SimpleListProperty<TaskLabel>(FXCollections.observableArrayList());
-		devTasks = new SimpleMapProperty<Developer, DeveloperTask>(FXCollections.observableHashMap());
+		devWork = new SimpleMapProperty<Developer, ListProperty<DeveloperWork>>(FXCollections.observableHashMap());
 		
 		this.id = id;
 	}
@@ -62,13 +62,13 @@ public class Task {
 		assignedDevs.add(d);
 	}
 	
-	public DeveloperTaskDetail addDeveloperTask(Developer dev, Date begin, Date end, String comment) {
-		if(dev == null || begin == null || end == null || comment == null) return null;
-		if(devTasks.get(dev) == null) {
-			devTasks.put(dev, new DeveloperTask(this));
+	public void addDeveloperWork(Developer dev, Date begin, Date end, String comment) {
+		if(dev == null || begin == null || end == null || comment == null) return;
+		if(devWork.get(dev) == null) {
+			devWork.put(dev, new SimpleListProperty<>(FXCollections.observableArrayList()));
 		}
 		
-		return devTasks.get(dev).add(begin, end, comment);
+		devWork.get(dev).add(new DeveloperWork(comment, begin, end, this));
 	}
 	
 	public void removeSprintGoal(SprintGoal sg) {
@@ -84,7 +84,7 @@ public class Task {
 	}
 	
 	public void removeDeveloperTask(Developer dev) {
-		devTasks.remove(dev);
+		devWork.remove(dev);
 	}
 	
 	public void setTaskState(TaskState state) {
@@ -135,8 +135,10 @@ public class Task {
 		return desc.get();
 	}
 	
-	public DeveloperTask getTasks(Developer dev) {
-		return devTasks.get(dev);
+	public ListProperty<DeveloperWork> workOfProperty(Developer dev) {
+		if(devWork.get(dev) == null)
+			devWork.put(dev, new SimpleListProperty<>(FXCollections.observableArrayList()));;
+		return devWork.get(dev);
 	}
 	
 	public ListProperty<TaskLabel> getLabelList() {
@@ -149,10 +151,6 @@ public class Task {
 
 	public ListProperty<Developer> getAssignedDevsList() {
 		return assignedDevs;
-	}
-	
-	public MapProperty<Developer, DeveloperTask> getDeveloperTaskList() {
-		return devTasks;
 	}
 	
 	public ObjectProperty<LocalDate> startDateProperty() {
