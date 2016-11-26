@@ -18,6 +18,7 @@
                   <TableView fx:id="tableDevs" prefHeight="279.0" prefWidth="156.0">
                      <columns>
                         <TableColumn fx:id="columnDevName" prefWidth="75.0" text="Assigned Developers" />
+                        <TableColumn fx:id="columnDevDuration" prefWidth="75.0" text="WorkTime" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

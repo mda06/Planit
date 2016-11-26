@@ -8,20 +8,24 @@ import com.mda.planit.model.Task;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 public class DevelopersWorkController {
 	@SuppressWarnings("unused")
 	private MainApp mainApp;
 	private Task task;
-
+	
 	@FXML
 	private TableView<Developer> tableDevs;
 	@FXML
 	private TableColumn<Developer, String> columnDevName;
+	@FXML
+	private TableColumn<Developer, Duration> columnDevDuration;
 
 	@FXML
 	private TableView<DeveloperWork> tableWork;
@@ -36,11 +40,28 @@ public class DevelopersWorkController {
 
 	@FXML
 	private void initialize() {
+		columnDevDuration.setCellValueFactory(data -> task.getDurationOf(data.getValue()));
+		columnDevDuration.setCellFactory(cd -> {
+			return new TableCell<Developer, Duration>() {
+		        @Override
+		        protected void updateItem(Duration dr, boolean empty) {
+		            super.updateItem(dr, empty);
+		            if(empty) {
+		            	setText("");
+		            } else if(dr == null) {
+		            	setText("0:0");
+		            } else {
+		            	String h = String.valueOf((int)dr.toHours());
+			        	String m = String.valueOf((int)dr.toMinutes() % 60);
+			            setText(h + ":" + m);
+		            }
+		        }
+			};
+		});
 		columnBeginDate.setCellValueFactory((data) -> data.getValue().beginDateStringProperty());
 		columnEndDate.setCellValueFactory((data) -> data.getValue().endDateStringProperty());
 		columnComment.setCellValueFactory(cd -> cd.getValue().commentProperty());
 		columnDuration.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<DeveloperWork, String>, ObservableValue<String>>() {
-
 		    @Override
 		    public ObservableValue<String> call(TableColumn.CellDataFeatures<DeveloperWork, String> p) {
 		        if (p.getValue() != null) {
